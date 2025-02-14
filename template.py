@@ -15,25 +15,31 @@ class UI:
             [6] -> Filtrar histórico
             [7] -> Gráfico
             ''')
-            
-            choice = int(input('Escolha uma opção: '))
-#no momento que foi feito esse codigo, a versão era mais antiga, então não utilizei o match case, atualizarei algum dia, aqui, serve para escolher uma das ações           
-            if choice == 1:
-             self._criar_conta()
-            elif choice == 2:
-             self._desativar_conta()
-            elif choice == 3:
-             self._transferir_saldo()
-            elif choice == 4:
-             self._movimentar_dinheiro()
-            elif choice == 5:
-             self._total_contas()
-            elif choice == 6:
-             self._filtrar_movimentacoes()
-            elif choice == 7:
-             self._criar_grafico()
-            else:
-             break
+            #Para interagir com a interface
+            try:
+                choice = int(input('Escolha uma opção: '))
+            except ValueError:
+                print("Entrada inválida. Por favor, digite um número.")
+                continue  
+
+            match choice:
+                case 1:
+                    self._criar_conta()
+                case 2:
+                    self._desativar_conta()
+                case 3:
+                    self._transferir_saldo()
+                case 4:
+                    self._movimentar_dinheiro()
+                case 5:
+                    self._total_contas()
+                case 6:
+                    self._filtrar_movimentacoes()
+                case 7:
+                    self._criar_grafico()
+                case _:  #Para um numero fora da serie
+                    print("Opção inválida. Por favor, escolha uma opção de 1 a 7.")
+                    continue  
          
 #função de criar uma conta        
     def _criar_conta(self):
@@ -47,6 +53,7 @@ class UI:
         conta = Conta(banco=Bancos(banco), valor=valor)
         criar_conta(conta)
         
+#função para chamar o desativar a conta       
     def _desativar_conta(self):
         print('Escolha a conta que deseja desativar.')    
         for i in listar_contas():
@@ -75,7 +82,7 @@ class UI:
         conta_enviar_id = int(input())
         valor = float(input('Digite o valor para transferir: '))
         transferir_saldo(conta_retirar_id, conta_enviar_id, valor)
-
+#função para chamar o movimentar dinheiro
     def _movimentar_dinheiro(self):
         print('Escolha a conta.')
         for i in listar_contas():
@@ -90,10 +97,10 @@ class UI:
         historico = Historico(conta_id=conta_id, tipo=Tipos(tipo), valor=valor, data=date.today())
         movimentar_dinheiro()
         
-        
+#função para chamar de ver o total de contas        
     def _total_contas(self):
         print(f'R$ {total_contas()}')
-        
+#função para chamar o movimentação de contas especificas        
     def _filtrar_movimentacoes(self):
         data_inicio = input('Digite a data de início: ')
         data_fim = input('Digite a data final: ')
@@ -101,7 +108,7 @@ class UI:
         data_fim = datetime.strptime(data_fim, '%d/%m/%Y').date()
         for i in buscar_historicos_entre_datas(data_inicio, data_fim):
             print(f'{i.valor} - {i.tipo.value}')
-        
+#Para criar um grafico        
     def _criar_grafico(self):
         criar_grafico()
 
